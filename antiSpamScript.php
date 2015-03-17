@@ -2,15 +2,17 @@
 // configure your imap mailboxes
 $mailboxes = array(
 	array(
-		'mailbox' 	=> '{imap.yourdomain.com:993/imap/ssl}INBOX',
-		'spamFolder' 	=> '{imap.yourdomain.com:993/imap/ssl}INBOX.Spam',
+		'server' 	=> '{imap.yourdomain.com:993/imap/ssl}',
+		'inboxFolder' 	=> 'INBOX',
+		'spamFolder' 	=> 'INBOX.Spam',
 		'username' 	=> 'info@yourdomain.com',
 		'password' 	=> 'yourpassword',
 		'enable'	=> true
 	),
 	array(
-		'mailbox' 	=> '{imap.yourdomain.com:993/imap/ssl}INBOX',
-		'spamFolder' 	=> '{imap.yourdomain.com:993/imap/ssl}INBOX.Spam',
+		'server' 	=> '{imap.yourdomain.com:993/imap/ssl}',
+		'inboxFolder' 	=> 'INBOX',
+		'spamFolder' 	=> 'INBOX.Spam',
 		'username' 	=> 'info@yourdomain.com',
 		'password' 	=> 'yourpassword',
 		'enable'	=> true
@@ -29,8 +31,8 @@ function decode_imap_text($str){
 
 foreach ($mailboxes as $current_mailbox) {
 	if ($current_mailbox['enable']) {
-		$stream = imap_open($current_mailbox['mailbox'], $current_mailbox['username'], $current_mailbox['password']);
-                $streamSpam = imap_open($current_mailbox['spamFolder'], $current_mailbox['username'], $current_mailbox['password']);
+		$stream = imap_open($current_mailbox['mailbox'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
+                $streamSpam = imap_open($current_mailbox['mailbox'].$current_mailbox['spamFolder'], $current_mailbox['username'], $current_mailbox['password']);
 
 		if ($stream) {
 			// Get our messages from the last day
@@ -47,7 +49,7 @@ foreach ($mailboxes as $current_mailbox) {
 
 					if(imap_search($streamSpam, 'FROM '.decode_imap_text($overview[0]->from))) {
 						imap_setflag_full($stream,$email_id, "\\Seen");
-						imap_mail_move($stream,$email_id,"INBOX.Spam");
+						imap_mail_move($stream,$email_id,$current_mailbox['spamFolder']);
 					}
 				}
 			}
