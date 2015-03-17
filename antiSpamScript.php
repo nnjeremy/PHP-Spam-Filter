@@ -29,8 +29,10 @@ function decode_imap_text($str){
     return $result;
 };
 
+// Start script
 foreach ($mailboxes as $current_mailbox) {
 	if ($current_mailbox['enable']) {
+		// Open stream
 		$stream = imap_open($current_mailbox['mailbox'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
                 $streamSpam = imap_open($current_mailbox['mailbox'].$current_mailbox['spamFolder'], $current_mailbox['username'], $current_mailbox['password']);
 
@@ -48,12 +50,15 @@ foreach ($mailboxes as $current_mailbox) {
 					$overview = imap_fetch_overview($stream,$email_id,0);
 
 					if(imap_search($streamSpam, 'FROM '.decode_imap_text($overview[0]->from))) {
+						// Set mail seen
 						imap_setflag_full($stream,$email_id, "\\Seen");
+						// Move email
 						imap_mail_move($stream,$email_id,$current_mailbox['spamFolder']);
 					}
 				}
 			}
 
+		// Close stream
 		imap_close($streamSpam);
 		imap_close($stream, CL_EXPUNGE);
 		}
