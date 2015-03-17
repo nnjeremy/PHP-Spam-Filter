@@ -35,8 +35,8 @@ function decode_imap_text($str){
 foreach ($mailboxes as $current_mailbox) {
 	if ($current_mailbox['enable']) {
 		// Open stream
-		$stream = imap_open($current_mailbox['mailbox'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
-                $streamSpam = imap_open($current_mailbox['mailbox'].$current_mailbox['spamFolder'], $current_mailbox['username'], $current_mailbox['password']);
+		$stream = imap_open($current_mailbox['server'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
+                $streamSpam = imap_open($current_mailbox['server'].$current_mailbox['spamFolder'], $current_mailbox['username'], $current_mailbox['password']);
 
 		if ($stream) {
 			// Get our messages from the last day
