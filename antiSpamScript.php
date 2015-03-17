@@ -7,6 +7,7 @@ $mailboxes = array(
 		'spamFolder' 	=> 'INBOX.Spam',
 		'username' 	=> 'info@yourdomain.com',
 		'password' 	=> 'yourpassword',
+		'setSeen'	=> true,
 		'enable'	=> true
 	),
 	array(
@@ -15,6 +16,7 @@ $mailboxes = array(
 		'spamFolder' 	=> 'INBOX.Spam',
 		'username' 	=> 'info@yourdomain.com',
 		'password' 	=> 'yourpassword',
+		'setSeen'	=> true,
 		'enable'	=> true
 	)
 );
@@ -50,8 +52,11 @@ foreach ($mailboxes as $current_mailbox) {
 					$overview = imap_fetch_overview($stream,$email_id,0);
 
 					if(imap_search($streamSpam, 'FROM '.decode_imap_text($overview[0]->from))) {
-						// Set mail seen
-						imap_setflag_full($stream,$email_id, "\\Seen");
+						if($current_mailbox['setSeen']) {
+							// Set mail seen
+							imap_setflag_full($stream,$email_id, "\\Seen");
+						}
+
 						// Move email
 						imap_mail_move($stream,$email_id,$current_mailbox['spamFolder']);
 					}
