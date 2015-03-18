@@ -45,7 +45,7 @@ foreach ($mailboxes as $current_mailbox) {
 
 			if (count($emails)){
 				// If we've got some email IDs, sort them from new to old and show them
-				rsort($emails);
+				//rsort($emails);
 
 				foreach($emails as $email_id){
 					// Fetch the email's overview and show subject, from and date.
