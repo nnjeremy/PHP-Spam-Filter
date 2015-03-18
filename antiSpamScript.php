@@ -33,6 +33,7 @@ function decode_imap_text($str){
 
 // Start script
 foreach ($mailboxes as $current_mailbox) {
+	// Check enable option
 	if ($current_mailbox['enable']) {
 		// Open stream
 		$streamInbox = imap_open($current_mailbox['server'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
@@ -51,7 +52,9 @@ foreach ($mailboxes as $current_mailbox) {
 					// Fetch the email's overview and show subject, from and date.
 					$overview = imap_fetch_overview($streamInbox,$email_id,0);
 
+					// Search adresse in the spam folder
 					if(imap_search($streamSpam, 'FROM '.decode_imap_text($overview[0]->from))) {
+						// Check seen option
 						if($current_mailbox['setSeen']) {
 							// Set mail seen
 							imap_setflag_full($streamInbox,$email_id, "\\Seen");
