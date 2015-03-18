@@ -34,13 +34,13 @@ function decode_imap_text($str){
 foreach ($mailboxes as $current_mailbox) {
 	if ($current_mailbox['enable']) {
 		// Open stream
-		$stream = imap_open($current_mailbox['server'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
+		$streamInbox = imap_open($current_mailbox['server'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
                 $streamSpam = imap_open($current_mailbox['server'].$current_mailbox['spamFolder'], $current_mailbox['username'], $current_mailbox['password']);
 
-		if ($stream && $streamSpam) {
+		if ($streamInbox && $streamSpam) {
 			// Get our messages from the last day
-			// Instead of searching for this day's message you could search for all the messages in your inbox using: $emails = imap_search($stream,'ALL');
-			$emails = imap_search($stream, 'SINCE '. date('d-M-Y',strtotime("-1 day")));
+			// Instead of searching for this day's message you could search for all the messages in your inbox using: $emails = imap_search($streamInbox,'ALL');
+			$emails = imap_search($streamInobx, 'SINCE '. date('d-M-Y',strtotime("-1 day")));
 
 			if (count($emails)){
 				// If we've got some email IDs, sort them from new to old and show them
@@ -48,23 +48,23 @@ foreach ($mailboxes as $current_mailbox) {
 
 				foreach($emails as $email_id){
 					// Fetch the email's overview and show subject, from and date.
-					$overview = imap_fetch_overview($stream,$email_id,0);
+					$overview = imap_fetch_overview($streamInbox,$email_id,0);
 
 					if(imap_search($streamSpam, 'FROM '.decode_imap_text($overview[0]->from))) {
 						if($current_mailbox['setSeen']) {
 							// Set mail seen
-							imap_setflag_full($stream,$email_id, "\\Seen");
+							imap_setflag_full($streamInbox,$email_id, "\\Seen");
 						}
 
 						// Move email
-						imap_mail_move($stream,$email_id,$current_mailbox['spamFolder']);
+						imap_mail_move($streamInbox,$email_id,$current_mailbox['spamFolder']);
 					}
 				}
 			}
 
 		// Close stream
 		imap_close($streamSpam);
-		imap_close($stream, CL_EXPUNGE);
+		imap_close($streamInbox, CL_EXPUNGE);
 		}
 	}
 } // end foreach
