@@ -37,7 +37,7 @@ foreach ($mailboxes as $current_mailbox) {
 		$stream = imap_open($current_mailbox['server'].$current_mailbox['inboxFolder'], $current_mailbox['username'], $current_mailbox['password']);
                 $streamSpam = imap_open($current_mailbox['server'].$current_mailbox['spamFolder'], $current_mailbox['username'], $current_mailbox['password']);
 
-		if ($stream) {
+		if ($stream && $streamSpam) {
 			// Get our messages from the last day
 			// Instead of searching for this day's message you could search for all the messages in your inbox using: $emails = imap_search($stream,'ALL');
 			$emails = imap_search($stream, 'SINCE '. date('d-M-Y',strtotime("-1 day")));
