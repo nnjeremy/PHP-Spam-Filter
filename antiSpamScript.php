@@ -8,7 +8,8 @@ $mailboxes = array(
 		'spamFolder' 	=> 'INBOX.Spam',
 		'username' 	=> 'info@yourdomain.com',
 		'password' 	=> 'yourpassword',
-		'setSeen'	=> true	),
+		'setSeen'	=> true
+	),
 	array(
                 'enable'        => true,
 		'server' 	=> '{imap.yourdomain.com:993/imap/ssl}',
