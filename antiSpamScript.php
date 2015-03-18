@@ -2,22 +2,21 @@
 // configure your imap mailboxes
 $mailboxes = array(
 	array(
+                'enable'        => true,
 		'server' 	=> '{imap.yourdomain.com:993/imap/ssl}',
 		'inboxFolder' 	=> 'INBOX',
 		'spamFolder' 	=> 'INBOX.Spam',
 		'username' 	=> 'info@yourdomain.com',
 		'password' 	=> 'yourpassword',
-		'setSeen'	=> true,
-		'enable'	=> true
-	),
+		'setSeen'	=> true	),
 	array(
+                'enable'        => true,
 		'server' 	=> '{imap.yourdomain.com:993/imap/ssl}',
 		'inboxFolder' 	=> 'INBOX',
 		'spamFolder' 	=> 'INBOX.Spam',
 		'username' 	=> 'info@yourdomain.com',
 		'password' 	=> 'yourpassword',
-		'setSeen'	=> true,
-		'enable'	=> true
+		'setSeen'	=> true
 	)
 );
 
