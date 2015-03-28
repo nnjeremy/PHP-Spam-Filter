@@ -21,16 +21,6 @@ $mailboxes = array(
 	)
 );
 
-// a function to decode MIME message header extensions and get the text
-function decode_imap_text($str){
-    $result = '';
-    $decode_header = imap_mime_header_decode($str);
-    foreach ($decode_header AS $obj) {
-        $result .= htmlspecialchars(rtrim($obj->text, "\t"));
-	}
-    return $result;
-};
-
 // Start script
 foreach ($mailboxes as $current_mailbox) {
 	// Check enable option
@@ -50,10 +40,11 @@ foreach ($mailboxes as $current_mailbox) {
 
 				foreach($emails as $email_id){
 					// Fetch the email's overview and show subject, from and date.
-					$overview = imap_fetch_overview($streamInbox,$email_id,0);
+					$inboxMailheader = imap_headerinfo($streamInbox,$email_id);
+					$inboxFromMailAdresse = $inboxMailheader->from[0]->mailbox . "@" . $inboxMailheader->from[0]->host;
 
 					// Search adresse in the spam folder
-					if(imap_search($streamSpam, 'FROM '.decode_imap_text($overview[0]->from))) {
+					if(imap_search($streamSpam, 'FROM '.$inboxFromMailAdresse)) {
 						// Check seen option
 						if($current_mailbox['setSeen']) {
 							// Set mail seen
